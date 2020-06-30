@@ -1,0 +1,35 @@
+from FreeCAD import Part
+from FreeCAD import Base
+import math
+
+v0 = Base.Vector(0, 0, 0)
+vX = Base.Vector(1, 0, 0)
+vY = Base.Vector(0, 1, 0)
+vZ = Base.Vector(0, 0, 1)
+
+posCaixa = Base.Vector(20, 0, 0)
+dirCaixa = Base.Vector(1, 1, 1)
+
+Mat = Base.Matrix()
+Mat.move(-10*vY)
+Mat.rotateX(math.pi/6)
+Mat.scale(3, 1, 1)
+
+cilindro = Part.makeCylinder (10, 30)
+caixa = Part.makeBox(10, 20, 30, posCaixa, dirCaixa)
+
+#cilindro.transformShape(Mat)
+cilindro.transformGeometry(Mat)
+
+#Part.show(cilindro)
+#Part.show(caixa)
+
+doc = FreeCAD.newDocument('pecas')
+docCilindro = doc.addObject("Part::Feature", 'Cilindro')
+docCilindro.Shape = cilindro
+docCaixa = doc.addObject("Part::Feature", 'Caixa')
+docCaixa.Shape = caixa
+
+grupo = doc.addObject('App::DocumentObjectGroup', 'Formas Simples')
+grupo.addObject(docCilindro)
+grupo.addObject(docCaixa)
