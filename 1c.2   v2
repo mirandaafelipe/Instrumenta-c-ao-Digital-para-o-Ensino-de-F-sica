@@ -1,0 +1,30 @@
+from FreeCAD import Part
+from FreeCAD import Base
+import math
+
+v0 = Base.Vector(0, 0, 0)
+vX = Base.Vector(1, 0, 0)
+vY = Base.Vector(0, 1, 0)
+vZ = Base.Vector(0, 0, 1)
+
+v1 = Base.Vector(0, 10, 0)
+v2 = Base.Vector(30, 10, 0)
+v3 = Base.Vector(30, 10, 0)
+v4 = Base.Vector(0, 10, 0)
+VC1 = Base.Vector(10, 0, 0)
+VC2 = Base.Vector(40, 0, 0)
+
+c1 = Part.Arc(v1, VC1, v4)
+c2 = Part.Arc(v2, VC2, v3)
+
+L1 = Part.LineSegment(v1, v2)
+L2 = Part.LineSegment(v3, v4)
+
+S1 = Part.Shape([c1, L1, c2, L2])
+
+W = Part.Wire(S1.Edges)
+P = W.extrude(Base.Vector(0, 0, 10))
+
+doc = FreeCAD.newDocument('pecas')
+docP = doc.addObject("Part::Feature", 'Extrusao')
+docP.Shape = P
